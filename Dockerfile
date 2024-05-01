@@ -5,9 +5,11 @@ ARG GROUPNAME=42tokyo
 ARG UID=1000
 ARG GID=1000
 
+# user権限系のものをインストールする
+RUN nix-env -iA nixpkg.su.out
+
 COPY ./nix /root/nix
 
 WORKDIR /root/nix
 
 ENTRYPOINT ["bash", "-c", "sleep infinity"]
-
