@@ -1,0 +1,9 @@
+version: '3'
+services:
+  nix:
+    container_name: "42tokyo-nix"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./42tokyo-my-volumes:/var/www
