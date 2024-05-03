@@ -1,0 +1,8 @@
+Defaults	env_reset
+Defaults	mail_badpass
+
+Defaults	use_pty
+
+root	ALL=(ALL:ALL) ALL
+%sudo	ALL=(ALL:ALL) ALL
+
