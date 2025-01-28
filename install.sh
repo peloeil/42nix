@@ -2,9 +2,10 @@
 
 INSTALL_DIR="/goinfre/$USER/nix"
 BINARY="$INSTALL_DIR/nix_bin"
-
-# nix version to install
 VERSION="2.20"
+
+# if version is provided as an argument,
+# use it
 if [[ -n "$1" ]]; then
     VERSION="$1"
 fi
@@ -12,8 +13,9 @@ fi
 # TODO: validate version
 URL="https://hydra.nixos.org/job/nix/maintenance-$VERSION/buildStatic.x86_64-linux/latest/download-by-type/file/binary-dist"
 
-# if install directory exists,
-# check if user really wants to reinstall the binary
+# if nix is already installed,
+# ask if user wants to reinstall
+# TODO: check if nix is already in PATH
 if [[ -d "$INSTALL_DIR" ]]; then
     WHILE_FLAG=true
     while $WHILE_FLAG; do
@@ -36,7 +38,7 @@ if [[ -d "$INSTALL_DIR" ]]; then
     done
 fi
 
-# install nix static binary
+# download nix binary
 echo "downloading nix static binary into $INSTALL_DIR ..."
 mkdir -p "$INSTALL_DIR"
 curl -L "$URL" >"$BINARY"
@@ -64,8 +66,8 @@ else
     echo "skipped writing $NIX_CONFIG_FILE as it already exists"
 fi
 
-# update path
 PATH_LINE="PATH=$HOME/.nix-profile/bin:$INSTALL_DIR:\$PATH"
+# update PATH
 SHELL_CONFIG_FILE="$HOME/.bashrc"
 case "$(basename "$SHELL")" in
 "zsh")
@@ -76,7 +78,7 @@ case "$(basename "$SHELL")" in
     SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
     ;;
 *)
-    echo "This install script only works with zsh, bash and fish." >&2
+    echo "this install script only works with zsh, bash and fish." >&2
     exit 1
     ;;
 esac
