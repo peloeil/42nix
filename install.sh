@@ -55,6 +55,25 @@ echo "downloaded nix static binary"
 WRAPPER="$INSTALL_DIR/nix"
 MY_NIX_PATH="/goinfre/$USER/nix"
 mkdir -p "$MY_NIX_PATH"
+if [[ -f "$WRAPPER" ]]; then
+    while true; do
+        read -r --prompt-str "overwrite $WRAPPER [y/N]: " INPUT
+        INPUT=${INPUT:-N}
+        case "$INPUT" in
+        "y" | "Y")
+            break
+            ;;
+        "n" | "N")
+            echo "ok. bye!"
+            exit 0
+            ;;
+        *)
+            echo -e "invalid input\n" >&2
+            ;;
+        esac
+    done
+    rm "$WRAPPER"
+fi
 cp ./wrapper.sh "$WRAPPER"
 chmod u+x "$WRAPPER"
 
