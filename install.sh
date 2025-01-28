@@ -17,7 +17,7 @@ URL="https://hydra.nixos.org/job/nix/maintenance-$VERSION/buildStatic.x86_64-lin
 if [[ -d "$INSTALL_DIR" ]]; then
     WHILE_FLAG=true
     while $WHILE_FLAG; do
-        read -p "reinstall nix binary [y/N]: " INPUT
+        read -r --prompt-str "reinstall nix binary [y/N]: " INPUT
         if [[ -z "$INPUT" ]]; then
             INPUT="N"
         fi
