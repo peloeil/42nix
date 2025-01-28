@@ -43,40 +43,20 @@ curl -L "$URL" >"$BINARY"
 chmod u+x "$BINARY"
 echo "downloaded nix static binary"
 
-# wrapper script
-WRAPPER_BINARY="$INSTALL_DIR/nix"
-MY_NIX_PATH="/goinfre/$USER/.nix/nix"
+# install wrapper
+WRAPPER="$INSTALL_DIR/nix"
+MY_NIX_PATH="/goinfre/$USER/nix"
 mkdir -p "$MY_NIX_PATH"
-cat <<EOF >"$WRAPPER_BINARY"
-#!/usr/bin/env bash
-
-bwrap --unshare-user \
-      --uid $(id -u) \
-      --gid $(id -g) \
-      --proc /proc \
-      --dev /dev \
-      --tmpfs /tmp \
-      --ro-bind /bin /bin \
-      --ro-bind /etc /etc \
-      --ro-bind /lib /lib \
-      --ro-bind /lib64 /lib64 \
-      --ro-bind /run /run \
-      --ro-bind /usr /usr \
-      --ro-bind /var /var \
-      --bind "$HOME" "$HOME" \
-      --bind "/goinfre/$USER" "/goinfre/$USER" \
-      --bind "$MY_NIX_PATH" /nix \
-      $BINARY \$@
-EOF
-chmod u+x "$WRAPPER_BINARY"
+cp ./wrapper.sh "$WRAPPER"
+chmod u+x "$WRAPPER"
 
 # config file
 NIX_CONFIG_FILE="$HOME/.config/nix/nix.conf"
 if [[ -d "$NIX_CONFIG_FILE" ]]; then
     echo "writing $NIX_CONFIG_FILE ..."
-    mkdir -p "$HOME/.config/nix" "/goinfre/$USER/.nix"
+    mkdir -p "$HOME/.config/nix"
     cat <<EOF >"$NIX_CONFIG_FILE"
-store = /goinfre/$USER/.nix
+store = /goinfre/$USER
 extra-experimental-features = flakes nix-command
 EOF
     echo "wrote $NIX_CONFIG_FILE"
