@@ -25,16 +25,13 @@ fi
 
 # if nix is already installed,
 # ask if user wants to reinstall
-    WHILE_FLAG=true
-    while $WHILE_FLAG; do
 if [[ -f "$NIX_BINARY" ]]; then
+    while true; do
         read -r --prompt-str "reinstall nix binary [y/N]: " INPUT
-        if [[ -z "$INPUT" ]]; then
-            INPUT="N"
-        fi
+        INPUT="${INPUT:-N}"
         case "$INPUT" in
         "y" | "Y")
-            WHILE_FLAG=false
+            break
             ;;
         "n" | "N")
             echo "ok. bye!"
