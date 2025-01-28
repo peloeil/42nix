@@ -104,6 +104,8 @@ case "$(basename "$SHELL")" in
     ;;
 *)
     echo "this install script only works with zsh, bash and fish." >&2
+    echo "please add the following line to your shell config file manually:" >&2
+    echo "$PATH_LINE" >&2
     exit 1
     ;;
 esac
