@@ -66,8 +66,8 @@ else
     echo "skipped writing $NIX_CONFIG_FILE as it already exists"
 fi
 
-PATH_LINE="PATH=$HOME/.nix-profile/bin:$INSTALL_DIR:\$PATH"
 # update PATH
+PATH_LINE="export PATH=$HOME/.nix-profile/bin:$INSTALL_DIR:\$PATH"
 SHELL_CONFIG_FILE="$HOME/.bashrc"
 case "$(basename "$SHELL")" in
 "zsh")
