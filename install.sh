@@ -92,24 +92,33 @@ EOF
 fi
 
 # update PATH
+## check if shell is zsh or bash
 PATH_LINE="export PATH=$HOME/.nix-profile/bin:$INSTALL_DIR:\$PATH"
 SHELL_CONFIG_FILE="$HOME/.bashrc"
 case "$(basename "$SHELL")" in
 "zsh")
     SHELL_CONFIG_FILE="$HOME/.zshrc"
     ;;
-"fish")
-    PATH_LINE="fish_add_path $HOME/.nix-profile/bin $INSTALL_DIR"
-    SHELL_CONFIG_FILE="$HOME/.config/fish/config.fish"
-    ;;
 *)
-    echo "this install script only works with zsh, bash and fish." >&2
+    echo "this install script only works with zsh or bash" >&2
     echo "please add the following line to your shell config file manually:" >&2
     echo "$PATH_LINE" >&2
     exit 1
     ;;
 esac
-if grep "$PATH_LINE" "$SHELL_CONFIG_FILE" 1>/dev/null; then
+## check if nix is already in PATH
+function dir_in_path() {
+    local dir="$1"
+    local path="$PATH"
+    local IFS=":"
+    for p in $path; do
+        if [[ "$p" == "$dir" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+if dir_in_path "$HOME/.nix-profile/bin" && dir_in_path "$INSTALL_DIR"; then
     echo "skipped updating $SHELL_CONFIG_FILE as nix is already in your PATH"
 else
     echo "updating $SHELL_CONFIG_FILE ..."
