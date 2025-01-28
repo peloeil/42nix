@@ -25,10 +25,9 @@ fi
 
 # if nix is already installed,
 # ask if user wants to reinstall
-# TODO: check if nix is already in PATH
-if [[ -d "$INSTALL_DIR" ]]; then
     WHILE_FLAG=true
     while $WHILE_FLAG; do
+if [[ -f "$NIX_BINARY" ]]; then
         read -r --prompt-str "reinstall nix binary [y/N]: " INPUT
         if [[ -z "$INPUT" ]]; then
             INPUT="N"
@@ -64,7 +63,9 @@ chmod u+x "$WRAPPER"
 
 # config file
 NIX_CONFIG_FILE="$HOME/.config/nix/nix.conf"
-if [[ -d "$NIX_CONFIG_FILE" ]]; then
+if [[ -f "$NIX_CONFIG_FILE" ]]; then
+    echo "skipped writing $NIX_CONFIG_FILE as it already exists"
+else
     echo "writing $NIX_CONFIG_FILE ..."
     mkdir -p "$HOME/.config/nix"
     cat <<EOF >"$NIX_CONFIG_FILE"
@@ -72,8 +73,6 @@ store = /goinfre/$USER
 extra-experimental-features = flakes nix-command
 EOF
     echo "wrote $NIX_CONFIG_FILE"
-else
-    echo "skipped writing $NIX_CONFIG_FILE as it already exists"
 fi
 
 # update PATH
