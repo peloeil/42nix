@@ -10,8 +10,18 @@ if [[ -n "$1" ]]; then
     VERSION="$1"
 fi
 
-# TODO: validate version
+# validation
+## validate version format (should be like "2.20")
+if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
+    echo "Error: Invalid version format. Version should be in format 'X.Y' (e.g. 2.20)" >&2
+    exit 1
+fi
 URL="https://hydra.nixos.org/job/nix/maintenance-$VERSION/buildStatic.x86_64-linux/latest/download-by-type/file/binary-dist"
+## check if version exists by testing URL response
+if ! curl --output /dev/null --silent --head --fail "$URL"; then
+    echo "Error: Version $VERSION does not exist or is not accessible" >&2
+    exit 1
+fi
 
 # if nix is already installed,
 # ask if user wants to reinstall
