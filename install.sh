@@ -3,11 +3,17 @@
 INSTALL_DIR="/goinfre/$USER/nix"
 BINARY="$INSTALL_DIR/nix"
 
+# nix version to install
 VERSION="2.20"
 if [[ -n "$1" ]]; then
 	VERSION="$1"
 fi
 
+# validate version
+URL="https://hydra.nixos.org/job/nix/maintenance-$VERSION/buildStatic.x86_64-linux/latest/download-by-type/file/binary-dist"
+
+# if install directory exists,
+# check if user really wants to reinstall the binary
 if [[ -d "$INSTALL_DIR" ]]; then
 	WHILE_FLAG=true
 	while $WHILE_FLAG; do
@@ -29,11 +35,11 @@ if [[ -d "$INSTALL_DIR" ]]; then
 fi
 
 # install static binary
-# TODO: check if nix version is valid
 mkdir -p "$INSTALL_DIR"
-curl -L "https://hydra.nixos.org/job/nix/maintenance-$VERSION/buildStatic.x86_64-linux/latest/download-by-type/file/binary-dist" > "$BINARY"
+curl -L "$URL" > "$BINARY"
 chmod u+x "$BINARY"
 
+# update path
 PATH_LINE="PATH=$INSTALL_DIR:\$PATH"
 CONFIG_FILE="$HOME/.bashrc"
 case "$(basename $SHELL)" in
