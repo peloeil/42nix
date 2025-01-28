@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-INSTALL_DIR="/goinfre/$USER/nix"
-BINARY="$INSTALL_DIR/nix_bin"
+INSTALL_DIR="/goinfre/$USER/bin"
+NIX_BINARY="$INSTALL_DIR/nix_bin"
 VERSION="2.20"
 
 # if version is provided as an argument,
@@ -41,8 +41,8 @@ fi
 # download nix binary
 echo "downloading nix static binary into $INSTALL_DIR ..."
 mkdir -p "$INSTALL_DIR"
-curl -L "$URL" >"$BINARY"
-chmod u+x "$BINARY"
+curl -L "$URL" >"$NIX_BINARY"
+chmod u+x "$NIX_BINARY"
 echo "downloaded nix static binary"
 
 # install wrapper
