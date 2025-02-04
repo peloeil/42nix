@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-NIX_BINARY="/goinfre/$USER/nix/nix_bin"
+NIX_BINARY="/goinfre/$USER/bin/nix_bin"
 MY_NIX_PATH="/goinfre/$USER/nix"
 
 bwrap --unshare-user \
